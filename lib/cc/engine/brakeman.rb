@@ -13,6 +13,7 @@ module CC
       def run
         brakeman = ::Brakeman.run(
           app_path: @directory,
+          config_file: "#{@directory}/config/brakeman.yml",
           skip_files: @engine_config["exclude_paths"]
         )
 

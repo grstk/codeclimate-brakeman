@@ -7,7 +7,7 @@ module CC
     describe Brakeman do
       before do
         @code = Dir.mktmpdir
-        FileUtils.mkdir_p(File.join(@code, "app/models"))
+        create_directory("app/models")
 
         create_source_file("app/models/model.rb", <<-EORUBY)
           class Model < ActiveRecord::Base
@@ -45,6 +45,20 @@ module CC
 
           output = run_engine(config)
           assert !output.include?("ModelAttrAccessible")
+        end
+
+        it "respects config/brakeman.yml" do
+          create_directory("config")
+          create_source_file("config/brakeman.yml",
+            ":skip_checks:\n- CheckModelAttrAccessible\n:rails4: true\n"
+          )
+
+          output = run_engine
+          assert !output.include?("ModelAttrAccessible")
+        end
+
+        def create_directory(path)
+          FileUtils.mkdir_p(File.join(@code, path))
         end
 
         def create_source_file(path, content)

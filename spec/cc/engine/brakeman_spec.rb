@@ -16,6 +16,8 @@ module CC
         EORUBY
       end
 
+      after { FileUtils.remove_dir(@code) }
+
       describe "#run" do
         it "analyzes Rails app using Brakeman and outputs issues in proper format" do
           results = {
@@ -49,7 +51,7 @@ module CC
           File.write(File.join(@code, path), content)
         end
 
-        def run_engine(config = nil)
+        def run_engine(config = {})
           io = StringIO.new
 
           engine = Brakeman.new(directory: @code, engine_config: config, io: io)

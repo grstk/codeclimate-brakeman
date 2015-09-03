@@ -6,7 +6,7 @@ module CC
     class Brakeman
       def initialize(directory:, io:, engine_config:)
         @directory = directory
-        @engine_config = engine_config || {}
+        @engine_config = engine_config
         @io = io
       end
 
@@ -17,13 +17,13 @@ module CC
         )
 
         brakeman.checks.all_warnings.each do |warning|
-          @io.print "#{warning_json(warning)}\0"
+          @io.print "#{issue_json(warning)}\0"
         end
       end
 
       private
 
-      def warning_json(warning)
+      def issue_json(warning)
         {
           type: "Issue",
           check_name: warning.check.gsub(/::Check/, "/"),

@@ -4,3 +4,6 @@ engines:
 ratings:
   paths:
   - "**.rb"
+  - "bin/brakeman"
+  - "Gemfile"
+  - "Rakefile"

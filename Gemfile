@@ -1,7 +1,10 @@
 source "https://rubygems.org"
 
 gem "brakeman"
-gem "pry"
+
+group :development do
+  gem "pry"
+end
 
 group :test do
   gem "rake"

@@ -1,13 +1,11 @@
-FROM alpine:edge
+FROM ruby:2.2.3-slim
 MAINTAINER Code Climate
 
 COPY . /usr/src/app
 WORKDIR /usr/src/app/
-RUN apk --update add ruby ruby-io-console ruby-dev ruby-bundler ruby-json build-base && \
-    bundle install -j 4 && \
-    apk del build-base && rm -fr /usr/share/ri
+RUN bundle install --jobs 4 --without "development test"
 
-RUN adduser -u 9000 -D app
+RUN adduser --uid 9000 app
 USER app
 
 VOLUME /code

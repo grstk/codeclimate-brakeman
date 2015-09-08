@@ -25,7 +25,7 @@ module CC
       private
 
       def issue_json(warning)
-        {
+        issue_hash = {
           type: "Issue",
           check_name: warning.check.gsub(/::Check/, "/"),
           description: warning.message,
@@ -38,7 +38,18 @@ module CC
               end: warning.line
             }
           }
-        }.to_json
+        }
+        unless warning.link.nil?
+          issue_hash.merge!(content: { body: content_body(warning.link) })
+        end
+        issue_hash.to_json
+      end
+
+      def content_body(link)
+        %r{http://brakemanscanner.org/docs/warning_types/(?<content_name>[^/]+)} =~ link
+        path = File.expand_path("../../../../config/contents/#{content_name}.md", __FILE__)
+        return File.read(path) if File.exist?(path)
+        "Read more: #{link}"
       end
 
       def local_path(file)

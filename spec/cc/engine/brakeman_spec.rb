@@ -32,7 +32,8 @@ module CC
                 begin: nil,
                 end: nil
               }
-            }
+            },
+            content: { body: File.read('config/contents/mass_assignment.md') }
           }.to_json
 
           output = run_engine
